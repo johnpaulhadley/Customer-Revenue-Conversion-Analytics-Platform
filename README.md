@@ -14,3 +14,4 @@ BigQuery, dbt, Python (pandas, SciPy, statsmodels), Tableau Public.
 ## Documentation
 - [Business case, scope and KPI definitions](docs/business_case.md)
 - [Data model](docs/data_model.md)
+- [Source data profile](docs/data_profile.md)
