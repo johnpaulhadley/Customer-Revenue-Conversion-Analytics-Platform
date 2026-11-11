@@ -1,0 +1,13 @@
+revenue_conversion:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      method: oauth                      # uses your gcloud application-default login
+      project: "{{ env_var('GCP_PROJECT') }}"
+      dataset: analytics
+      location: US                       # the public dataset lives in the US multi-region
+      threads: 4
+      priority: interactive
+      job_execution_timeout_seconds: 600
+      maximum_bytes_billed: "{{ env_var('MAX_BYTES_BILLED', '5000000000') | int }}"

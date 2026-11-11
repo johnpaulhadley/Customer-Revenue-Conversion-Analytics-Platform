@@ -1,0 +1,11 @@
+version: 2
+models:
+  - name: stg_events
+    description: One row per GA4 event with the fields used downstream. Partitioned by event_date.
+    columns:
+      - name: event_date
+        data_tests: [not_null]
+      - name: event_name
+        data_tests: [not_null]
+      - name: user_pseudo_id
+        data_tests: [not_null]

@@ -1,0 +1,21 @@
+version: 2
+models:
+  - name: int_orders
+    columns:
+      - name: transaction_id
+        data_tests: [unique, not_null]
+      - name: revenue_usd
+        data_tests: [not_null]
+  - name: int_sessions
+    columns:
+      - name: session_key
+        data_tests: [unique, not_null]
+      - name: channel
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Organic Search', 'Direct', 'Paid Search', 'Referral', 'Email', 'Other', 'Unknown']
+  - name: int_purchase_reconciliation
+    columns:
+      - name: event_date
+        data_tests: [unique, not_null]

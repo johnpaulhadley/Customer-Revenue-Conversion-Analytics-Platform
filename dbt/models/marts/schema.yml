@@ -1,0 +1,17 @@
+version: 2
+models:
+  - name: fct_daily_sessions
+    description: Daily session and funnel counts by channel, device, user type and country group.
+  - name: fct_product_daily
+    description: Daily views, adds to cart and purchases by product.
+  - name: dim_customers
+    columns:
+      - name: user_pseudo_id
+        data_tests: [unique, not_null]
+      - name: customer_segment
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Non-buyer', 'Repeat, recent', 'Repeat, lapsing', 'One-time, recent', 'One-time, lapsed']
+  - name: fct_purchase_reconciliation
+    description: Daily reconciliation of raw purchase revenue to counted orders.

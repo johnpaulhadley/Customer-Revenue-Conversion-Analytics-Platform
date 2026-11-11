@@ -3,7 +3,7 @@ google-cloud-bigquery-storage
 db-dtypes
 pandas
 python-dotenv
-dbt-bigquery
+dbt-bigquery>=1.10
 scipy
 statsmodels
 jupyter

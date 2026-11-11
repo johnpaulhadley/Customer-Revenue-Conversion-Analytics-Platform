@@ -1,12 +1,44 @@
-# Data model (draft, to be confirmed by the source profile)
+# Data model
 
-## Layers
-1. **Source:** the public daily event tables, read in place. Nothing is copied wholesale.
-2. **staging** (dbt): `stg_events`, flattened event rows with the parameters the analysis needs, partitioned by event date and loaded incrementally day by day.
-3. **intermediate** (dbt): `int_sessions` (one row per session, with funnel flags, channel, device, revenue) and `int_orders` (one row per distinct transaction).
-4. **marts** (dbt): `fct_daily_channel_funnel`, `fct_product_daily`, `dim_customer` and `fct_customer_cohorts`, small aggregated tables that Tableau reads.
+The source is read in place from the public dataset. dbt builds three layers in the project's own BigQuery datasets: `staging`, `intermediate` and `marts`.
 
-## Partitioning and cost
-- `stg_events` is partitioned by `event_date` and clustered by `event_name`. Incremental runs process only new days; a backfill reprocesses a chosen date range.
-- Marts are aggregated to day level, so dashboards scan kilobytes rather than the raw events.
-- `analysis/profile_source.py` logs the bytes each query scans, which is the baseline for measuring savings.
+```
+bigquery-public-data.ga4_obfuscated_sample_ecommerce.events_YYYYMMDD   (92 daily tables)
+        |
+staging.stg_events                 one row per event, partitioned by day, incremental
+        |
+intermediate.int_orders            one row per real order (duplicates and unidentified purchases removed)
+intermediate.int_sessions          one row per session: funnel flags, channel, device, new vs returning, orders
+intermediate.int_purchase_reconciliation   raw purchase revenue split into orders, duplicates, unidentified
+        |
+marts.fct_daily_sessions           day x channel x device x new/returning x country group, additive counts
+marts.fct_product_daily            day x product: views, adds to cart, orders, units, revenue
+marts.dim_customers                one row per user: orders, revenue, customer segment
+marts.fct_purchase_reconciliation  data-quality view for the dashboard and README
+```
+
+## Grain and definitions
+- **Session:** `user_pseudo_id` + `ga_session_id`. Events with no session ID are left out of session counts.
+- **Order:** one distinct `transaction_id` on a purchase event. Where the same ID appears on several purchase events, the first is kept. Purchases with a missing or `(not set)` ID cannot be de-duplicated and are reported separately, not as orders.
+- **Revenue:** `purchase_revenue_in_usd` of the kept purchase event.
+- **New vs returning:** the session's `ga_session_number` is 1 for a user's first session.
+- **Funnel steps:** a session reaches a step if it has at least one event of that type: view_item, add_to_cart, begin_checkout, add_shipping_info, add_payment_info, purchase.
+- **Channel:** the session's own source and medium where the event carries them, otherwise the user's first-touch source and medium. Obfuscated values (`<Other>`, `(data deleted)`) become Unknown. Both `channel` and `first_user_channel` are kept so the two can be compared.
+- **Product category:** missing, blank and `(not set)` categories become Unknown. Items named `(not set)` are left out.
+- **Customer segment:** non-buyer; repeat or one-time buyer; recent if the last order was within 30 days of the data's end. Three months is too short for full cohort or lifetime-value analysis.
+
+## Why the marts are additive
+`fct_daily_sessions` stores counts (sessions, sessions reaching each funnel step, orders, revenue), never rates. Tableau sums the counts for whatever filters are applied and divides afterwards, so a conversion rate for "mobile, organic search, December" is always correct. Averaging stored rates would weight small segments the same as large ones.
+
+## Cost design
+- **Daily-table pruning.** The source is one table per day. `stg_events` filters on `_table_suffix` with dates fixed when the model compiles, so BigQuery opens only the days being loaded. A filter written as a subquery would make BigQuery open every day.
+- **Partitioning and clustering.** `stg_events` is partitioned by `event_date` and clustered by `event_name` and `user_pseudo_id`, so date-filtered and event-filtered queries read only what they need.
+- **Incremental loads.** After the first build, `stg_events` reprocesses only the last three days (`lookback_days`), replacing those partitions. A chosen range can be reloaded with `--vars '{backfill_start: ..., backfill_end: ...}'`.
+- **Narrow columns.** Staging keeps about 25 of the source's columns and only the item fields the product analysis uses.
+- **Small marts.** Dashboards read day-level marts, not events.
+- **Guard rail.** Every query runs with `maximum_bytes_billed`, so a mistake fails instead of scanning terabytes.
+
+`analysis/measure_cost.py` measures the effect: the same questions asked of the raw events, the staging table and the marts, and the bytes billed by each dbt model in a full build versus an incremental run.
+
+## Tests
+Keys are unique and not null (orders, sessions, customers, reconciliation days); channel and segment values are from a fixed list; and three custom tests check that order, duplicate and unidentified revenue add up to raw purchase revenue each day, that session-level orders and revenue in the mart match `int_orders`, and that no funnel count exceeds its session count.

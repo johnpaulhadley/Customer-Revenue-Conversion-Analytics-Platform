@@ -1,6 +1,6 @@
 # Customer Revenue & Conversion Analytics Platform
 
-**Status: in progress.** Scope and KPI definitions are drafted; the source is being profiled.
+**Status: in progress.** Scope, source profile and dbt models are done; analysis and dashboards are next.
 
 ## Business question
 Where is the Google Merchandise Store losing revenue across traffic, conversion, products and customers, and what is a realistic improvement worth in dollars?
@@ -15,3 +15,16 @@ BigQuery, dbt, Python (pandas, SciPy, statsmodels), Tableau Public.
 - [Business case, scope and KPI definitions](docs/business_case.md)
 - [Data model](docs/data_model.md)
 - [Source data profile](docs/data_profile.md)
+
+## Run locally
+Needs Python 3.11+, the [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) and a Google Cloud project with BigQuery enabled.
+```
+gcloud auth application-default login
+cp .env.example .env                      # then set GCP_PROJECT
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+set -a; source .env; set +a
+python analysis/profile_source.py         # source profile and baseline scan sizes
+cd dbt && dbt build --profiles-dir . && cd ..
+python analysis/measure_cost.py           # bytes saved by the model design
+```
