@@ -20,6 +20,7 @@ from pathlib import Path
 
 import pandas as pd
 from dotenv import load_dotenv
+from google.api_core.exceptions import NotFound
 from google.cloud import bigquery
 
 load_dotenv()
@@ -117,7 +118,12 @@ def compare_queries(client):
     rows = []
     for question, versions in QUESTIONS.items():
         for version, sql in versions.items():
-            rows.append({"question": question, "version": version, "bytes_scanned": dry_run_bytes(client, sql)})
+            try:
+                scanned = dry_run_bytes(client, sql)
+            except NotFound as exc:  # a dbt table that has not been built
+                print(f"Skipped '{question}: {version}': {exc.message}")
+                continue
+            rows.append({"question": question, "version": version, "bytes_scanned": scanned})
     df = pd.DataFrame(rows)
     df["mb_scanned"] = (df["bytes_scanned"] / 1e6).round(2)
     # On-demand pricing bills at least 10 MB per table a query reads.
