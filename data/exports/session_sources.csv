@@ -1,0 +1,39 @@
+channel,session_source,session_medium,sessions,purchase_sessions,revenue_usd
+Organic Search,google,organic,95244,1580,93259.0
+Referral,shop.googlemerchandisestore.com,referral,52397,1332,93073.0
+Direct,(direct),(none),37786,306,20322.0
+Organic Search,(none),(none),33157,0,0.0
+Unknown,<Other>,<Other>,25327,125,7820.0
+Direct,(none),(none),22181,1,12.0
+Referral,<Other>,referral,20381,978,62639.0
+Unknown,(none),(none),18993,0,0.0
+Referral,(none),(none),15947,0,0.0
+Paid Search,google,cpc,7672,47,2960.0
+Unknown,(data deleted),(data deleted),6343,190,10840.0
+Organic Search,<Other>,organic,4845,34,1756.0
+Paid Search,(none),(none),4275,0,0.0
+Referral,googlemerchandisestore.com,referral,4095,95,5789.0
+Referral,analytics.google.com,referral,3412,1,0.0
+Other,Partners,affiliate,1329,2,167.0
+Organic Search,shop.googlemerchandisestore.com,organic,1086,24,1392.0
+Referral,creatoracademy.youtube.com,referral,886,2,34.0
+Organic Search,(none),organic,756,0,0.0
+Organic Search,baidu,organic,696,0,0.0
+Referral,sites.google.com,referral,417,28,1405.0
+Referral,support.google.com,referral,360,2,122.0
+Referral,perksatwork.com,referral,226,11,617.0
+Referral,coursera.org,referral,207,0,0.0
+Organic Search,bing,organic,198,8,540.0
+Referral,mail.google.com,referral,156,22,919.0
+Referral,googleads.g.doubleclick.net,referral,122,0,0.0
+Referral,l.facebook.com,referral,111,1,16.0
+Email,Newsletter_January_2021,email,106,3,78.0
+Unknown,<Other>,(data deleted),100,3,120.0
+Referral,moma.corp.google.com,referral,76,9,646.0
+Organic Search,yahoo,organic,69,2,224.0
+Referral,m.facebook.com,referral,62,0,0.0
+Email,Newsletter_December_2020,email,55,8,624.0
+Organic Search,(direct),organic,53,9,915.0
+Referral,m.baidu.com,referral,51,0,0.0
+Referral,facebook.com,referral,50,0,0.0
+Organic Search,(data deleted),organic,50,5,123.0
