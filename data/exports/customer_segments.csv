@@ -8,9 +8,12 @@ Non-buyer,Organic Search,tablet,2271,0,0,0.0,2849
 Non-buyer,Paid Search,desktop,8229,0,0,0.0,10543
 Non-buyer,Paid Search,mobile,5538,0,0,0.0,7148
 Non-buyer,Paid Search,tablet,334,0,0,0.0,413
-Non-buyer,Referral,desktop,22879,0,0,0.0,30252
-Non-buyer,Referral,mobile,15682,0,0,0.0,20848
-Non-buyer,Referral,tablet,855,0,0,0.0,1138
+Non-buyer,Referral,desktop,14468,0,0,0.0,18955
+Non-buyer,Referral,mobile,9915,0,0,0.0,13011
+Non-buyer,Referral,tablet,535,0,0,0.0,692
+Non-buyer,Self-referral,desktop,8411,0,0,0.0,11297
+Non-buyer,Self-referral,mobile,5767,0,0,0.0,7837
+Non-buyer,Self-referral,tablet,320,0,0,0.0,446
 Non-buyer,Unknown,desktop,28545,0,0,0.0,37357
 Non-buyer,Unknown,mobile,19582,0,0,0.0,25736
 Non-buyer,Unknown,tablet,1131,0,0,0.0,1465
@@ -23,9 +26,12 @@ Non-buyer,Unknown,tablet,1131,0,0,0.0,1465
 "One-time, lapsed",Paid Search,desktop,76,76,76,5490.0,228
 "One-time, lapsed",Paid Search,mobile,49,49,49,3595.0,196
 "One-time, lapsed",Paid Search,tablet,2,2,2,111.0,5
-"One-time, lapsed",Referral,desktop,256,256,256,19418.0,888
-"One-time, lapsed",Referral,mobile,157,157,157,9858.0,544
-"One-time, lapsed",Referral,tablet,9,9,9,574.0,41
+"One-time, lapsed",Referral,desktop,142,142,142,10831.0,517
+"One-time, lapsed",Referral,mobile,85,85,85,4944.0,285
+"One-time, lapsed",Referral,tablet,5,5,5,267.0,22
+"One-time, lapsed",Self-referral,desktop,114,114,114,8587.0,371
+"One-time, lapsed",Self-referral,mobile,72,72,72,4914.0,259
+"One-time, lapsed",Self-referral,tablet,4,4,4,307.0,19
 "One-time, lapsed",Unknown,desktop,277,277,277,20016.0,943
 "One-time, lapsed",Unknown,mobile,211,211,211,16378.0,681
 "One-time, lapsed",Unknown,tablet,17,17,17,978.0,65
@@ -38,9 +44,11 @@ Non-buyer,Unknown,tablet,1131,0,0,0.0,1465
 "One-time, recent",Paid Search,desktop,22,22,22,848.0,46
 "One-time, recent",Paid Search,mobile,12,12,12,776.0,29
 "One-time, recent",Paid Search,tablet,2,2,2,206.0,7
-"One-time, recent",Referral,desktop,55,55,55,4185.0,192
-"One-time, recent",Referral,mobile,47,47,47,2895.0,147
+"One-time, recent",Referral,desktop,31,31,31,2304.0,94
+"One-time, recent",Referral,mobile,32,32,32,2126.0,105
 "One-time, recent",Referral,tablet,5,5,5,410.0,19
+"One-time, recent",Self-referral,desktop,24,24,24,1881.0,98
+"One-time, recent",Self-referral,mobile,15,15,15,769.0,42
 "One-time, recent",Unknown,desktop,80,80,80,5494.0,229
 "One-time, recent",Unknown,mobile,62,62,62,4167.0,177
 "One-time, recent",Unknown,tablet,4,4,4,252.0,9
@@ -51,9 +59,11 @@ Non-buyer,Unknown,tablet,1131,0,0,0.0,1465
 "Repeat, lapsing",Organic Search,tablet,2,2,4,136.0,12
 "Repeat, lapsing",Paid Search,desktop,10,10,24,3090.0,59
 "Repeat, lapsing",Paid Search,mobile,2,2,5,777.0,12
-"Repeat, lapsing",Referral,desktop,35,35,81,5914.0,169
-"Repeat, lapsing",Referral,mobile,27,27,70,3395.0,130
-"Repeat, lapsing",Referral,tablet,1,1,5,1260.0,11
+"Repeat, lapsing",Referral,desktop,18,18,37,3198.0,72
+"Repeat, lapsing",Referral,mobile,14,14,37,1642.0,64
+"Repeat, lapsing",Self-referral,desktop,17,17,44,2716.0,97
+"Repeat, lapsing",Self-referral,mobile,13,13,33,1753.0,66
+"Repeat, lapsing",Self-referral,tablet,1,1,5,1260.0,11
 "Repeat, lapsing",Unknown,desktop,51,51,140,8533.0,295
 "Repeat, lapsing",Unknown,mobile,24,24,60,5184.0,129
 "Repeat, lapsing",Unknown,tablet,2,2,4,565.0,9
@@ -63,7 +73,8 @@ Non-buyer,Unknown,tablet,1131,0,0,0.0,1465
 "Repeat, recent",Organic Search,mobile,10,10,25,959.0,42
 "Repeat, recent",Paid Search,desktop,5,5,11,634.0,34
 "Repeat, recent",Paid Search,mobile,1,1,2,27.0,2
-"Repeat, recent",Referral,desktop,9,9,20,1185.0,49
+"Repeat, recent",Referral,desktop,4,4,10,608.0,25
 "Repeat, recent",Referral,mobile,3,3,8,315.0,19
+"Repeat, recent",Self-referral,desktop,5,5,10,577.0,24
 "Repeat, recent",Unknown,desktop,6,6,22,891.0,44
 "Repeat, recent",Unknown,mobile,9,9,26,1703.0,59

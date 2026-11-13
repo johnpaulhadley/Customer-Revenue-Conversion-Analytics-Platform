@@ -2,11 +2,12 @@
 
 - **Overall:** 360,129 sessions, conversion 1.35%, 4,451 orders, $307,640 revenue in tracked sessions, mean order $69, revenue per session $0.85.
 - **Data quality:** 6.3% of raw purchase revenue was duplicate events and 8.8% had no usable transaction ID; both are excluded from revenue.
+- **Traffic sources:** self-referrals from the store's own domain were 16.0% of sessions and 32.6% of revenue; 26.3% of sessions had no recorded source and 1 of them had a purchase.
 - **By month:** 2020-11 1.49%; 2020-12 1.59%; 2021-01 0.94%.
 - **Mobile vs desktop:** 1.39% vs 1.32% (desktop), difference +0.08 pp [95% CI +0.00 pp to +0.16 pp], adjusted p = 0.0994, not significant.
 - **Tablet vs desktop:** 1.30% vs 1.32% (desktop), difference -0.02 pp [95% CI -0.25 pp to +0.26 pp], adjusted p = 0.902, not significant.
 - **Returning vs new:** 3.10% vs 0.68% (New), difference +2.42 pp [95% CI +2.31 pp to +2.54 pp], adjusted p = 0.
-- **Channels significantly different from the rest:** Other 0.15% (-1.20 pp); Paid Search 0.39% (-0.99 pp); Direct 0.51% (-1.00 pp); Unknown 0.63% (-0.84 pp); Organic Search 1.22% (-0.20 pp); Referral 2.50% (+1.59 pp); Email 11.68% (+10.33 pp).
+- **Channels significantly different from the rest:** Affiliate 0.15% (-1.68 pp); Paid Search 0.61% (-1.25 pp); Direct 0.81% (-1.18 pp); Unknown 1.00% (-0.94 pp); Organic Search 1.61% (-0.35 pp); Self-referral 2.52% (+0.89 pp); Referral 3.89% (+2.30 pp); Email 11.68% (+9.86 pp).
 - **Closed funnel, share continuing at each step:** Viewed a product 21.4%; Added to cart 19.7%; Began checkout 39.3%; Added shipping 100.0%; Added payment 64.7%; Purchased 73.8%.
 - **Purchases outside the closed funnel:** 41% of sessions with a purchase skipped an earlier step in that session.
 - **Biggest funnel loss:** 283,109 sessions lost at 'Viewed a product' (21.4% continue). Lowest step rate: 'Added to cart' at 19.7%.
@@ -16,7 +17,7 @@
 - **Cart completion, mobile vs desktop:** 19.42% vs 18.27% (+1.15 pp, adjusted p = 0.156, not significant).
 - **Cart completion, tablet vs desktop:** 19.31% vs 18.27% (+1.04 pp, adjusted p = 0.635, not significant).
 - **Cart completion, Returning vs New:** 27.37% vs 12.58% (+14.79 pp, adjusted p = 8.21e-117).
-- **Channels per session vs by first touch:** Organic Search 1.22% per session, 1.31% of first-touch visitors bought; Referral 2.50% per session, 1.51% of first-touch visitors bought; Direct 0.51% per session, 1.32% of first-touch visitors bought; Unknown 0.63% per session, 1.49% of first-touch visitors bought; Paid Search 0.39% per session, 1.27% of first-touch visitors bought.
+- **Channels per session vs by first touch:** Organic Search 1.61% per session, 1.31% of first-touch visitors bought; Self-referral 2.52% per session, 1.80% of first-touch visitors bought; Direct 0.81% per session, 1.32% of first-touch visitors bought; Unknown 1.00% per session, 1.49% of first-touch visitors bought; Referral 3.89% per session, 1.34% of first-touch visitors bought; Paid Search 0.61% per session, 1.27% of first-touch visitors bought.
 - **Order value:** Returning $72 vs New (+$7).
 - **Product data:** 36 item-list rows per session on product views and 44 on adds to cart, so only purchases are used per product.
 - **Products:** 390 sold; top 36 brought half of item revenue, top 20 brought 37%. Groups: Apparel 58%; Bags 8%; Drinkware 7%; Small goods 7%; Lifestyle 6%; Collection: Campus 6%.

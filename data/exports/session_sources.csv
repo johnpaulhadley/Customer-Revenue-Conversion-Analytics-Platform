@@ -1,21 +1,17 @@
 channel,session_source,session_medium,sessions,purchase_sessions,revenue_usd
 Organic Search,google,organic,95244,1580,93259.0
-Referral,shop.googlemerchandisestore.com,referral,52397,1332,93073.0
+Not recorded,(none),(none),94553,1,12.0
+Self-referral,shop.googlemerchandisestore.com,referral,52397,1332,93073.0
 Direct,(direct),(none),37786,306,20322.0
-Organic Search,(none),(none),33157,0,0.0
 Unknown,<Other>,<Other>,25327,125,7820.0
-Direct,(none),(none),22181,1,12.0
 Referral,<Other>,referral,20381,978,62639.0
-Unknown,(none),(none),18993,0,0.0
-Referral,(none),(none),15947,0,0.0
 Paid Search,google,cpc,7672,47,2960.0
 Unknown,(data deleted),(data deleted),6343,190,10840.0
 Organic Search,<Other>,organic,4845,34,1756.0
-Paid Search,(none),(none),4275,0,0.0
-Referral,googlemerchandisestore.com,referral,4095,95,5789.0
+Self-referral,googlemerchandisestore.com,referral,4095,95,5789.0
 Referral,analytics.google.com,referral,3412,1,0.0
-Other,Partners,affiliate,1329,2,167.0
-Organic Search,shop.googlemerchandisestore.com,organic,1086,24,1392.0
+Affiliate,Partners,affiliate,1329,2,167.0
+Self-referral,shop.googlemerchandisestore.com,organic,1086,24,1392.0
 Referral,creatoracademy.youtube.com,referral,886,2,34.0
 Organic Search,(none),organic,756,0,0.0
 Organic Search,baidu,organic,696,0,0.0
