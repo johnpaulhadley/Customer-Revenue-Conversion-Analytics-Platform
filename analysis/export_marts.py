@@ -65,6 +65,17 @@ EXPORTS = {
         group by 1, 2, 3
         order by 1, 2, 3""",
 
+    # Sources behind each session channel, to check what the channels contain.
+    "session_sources": f"""
+        select channel, coalesce(session_source, '(none)') as session_source,
+               coalesce(session_medium, '(none)') as session_medium,
+               count(*) as sessions, countif(reached_purchase) as purchase_sessions,
+               round(sum(revenue_usd), 2) as revenue_usd
+        from `{P}.intermediate.int_sessions`
+        group by 1, 2, 3
+        having count(*) >= 50
+        order by sessions desc""",
+
     "purchase_reconciliation": f"""
         select * from `{P}.marts.fct_purchase_reconciliation` order by event_date""",
 }
