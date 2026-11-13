@@ -4,6 +4,7 @@ All rates are proportions of sessions (or of sessions reaching an earlier
 funnel step), so they are tested as binomial proportions:
 - 95% confidence intervals use the Wilson method, which behaves well for small
   rates and small segments.
+- Funnel step rates use the closed funnel, so every rate is between 0 and 1.
 - Differences between two segments use a two-proportion z-test, with a 95%
   interval for the difference (Newcombe's method).
 - p-values are adjusted with Holm's method within each family of tests, so
@@ -21,14 +22,15 @@ from statsmodels.stats.proportion import (
     proportions_ztest,
 )
 
+# Closed funnel: each step counts sessions that also completed every earlier step.
 FUNNEL = [
     ("sessions", "Session"),
-    ("view_item_sessions", "Viewed a product"),
-    ("add_to_cart_sessions", "Added to cart"),
-    ("begin_checkout_sessions", "Began checkout"),
-    ("add_shipping_sessions", "Added shipping"),
-    ("add_payment_sessions", "Added payment"),
-    ("purchase_sessions", "Purchased"),
+    ("funnel_view_item", "Viewed a product"),
+    ("funnel_add_to_cart", "Added to cart"),
+    ("funnel_begin_checkout", "Began checkout"),
+    ("funnel_add_shipping", "Added shipping"),
+    ("funnel_add_payment", "Added payment"),
+    ("funnel_purchase", "Purchased"),
 ]
 VALUE_COLS = ["sessions", "purchase_sessions", "orders", "revenue_usd"]
 

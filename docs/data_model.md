@@ -22,9 +22,10 @@ marts.fct_purchase_reconciliation  data-quality view for the dashboard and READM
 - **Order:** one distinct `transaction_id` on a purchase event. Where the same ID appears on several purchase events, the first is kept. Purchases with a missing or `(not set)` ID cannot be de-duplicated and are reported separately, not as orders.
 - **Revenue:** `purchase_revenue_in_usd` of the kept purchase event.
 - **New vs returning:** the session's `ga_session_number` is 1 for a user's first session.
-- **Funnel steps:** a session reaches a step if it has at least one event of that type: view_item, add_to_cart, begin_checkout, add_shipping_info, add_payment_info, purchase.
+- **Funnel steps:** view_item, add_to_cart, begin_checkout, add_shipping_info, add_payment_info, purchase. The mart keeps two counts per step. The open count (`*_sessions`) is sessions with at least one event of that type; GA4 does not force steps into order, so a later step can exceed an earlier one. The closed count (`funnel_*`) also requires every earlier step, so each step is a subset of the last; drop-off analysis uses these.
+- **Cart abandonment:** sessions with an add to cart and no purchase in the same session, over sessions with an add to cart.
 - **Channel:** the session's own source and medium where the event carries them, otherwise the user's first-touch source and medium. Obfuscated values (`<Other>`, `(data deleted)`) become Unknown. Both `channel` and `first_user_channel` are kept so the two can be compared.
-- **Product category:** missing, blank and `(not set)` categories become Unknown. Items named `(not set)` are left out.
+- **Product category:** missing, blank and `(not set)` categories become Unknown. A product can carry different categories on different events (a view logged under one, the purchase under another), so each product gets one: the known category it appears under most often. Items named `(not set)` are left out.
 - **Customer segment:** non-buyer; repeat or one-time buyer; recent if the last order was within 30 days of the data's end. Three months is too short for full cohort or lifetime-value analysis.
 
 ## Why the marts are additive
