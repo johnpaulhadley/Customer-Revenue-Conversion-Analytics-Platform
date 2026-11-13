@@ -92,6 +92,22 @@ JOB_HISTORY = """
 COMMENT = re.compile(r"/\*\s*(\{.*?\})\s*\*/", re.S)
 
 
+def table_sizes(client):
+    """Rows and stored size of every table dbt built. Metadata only, costs nothing."""
+    frames = []
+    for dataset in ("staging", "intermediate", "marts"):
+        sql = f"""select '{dataset}' as dataset, table_id, row_count, size_bytes
+                  from `{PROJECT}.{dataset}.__TABLES__`"""
+        try:
+            frames.append(client.query(sql).to_dataframe())
+        except Exception as exc:  # dataset not built yet
+            print(f"Could not read {dataset}: {exc}")
+    df = pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+    if not df.empty:
+        df["mb_stored"] = (df["size_bytes"] / 1e6).round(1)
+    return df
+
+
 def dry_run_bytes(client, sql):
     job = client.query(sql, job_config=bigquery.QueryJobConfig(dry_run=True, use_query_cache=False))
     return job.total_bytes_processed
@@ -104,8 +120,10 @@ def compare_queries(client):
             rows.append({"question": question, "version": version, "bytes_scanned": dry_run_bytes(client, sql)})
     df = pd.DataFrame(rows)
     df["mb_scanned"] = (df["bytes_scanned"] / 1e6).round(2)
-    first = df.groupby("question")["bytes_scanned"].transform("first")
-    df["times_less_than_raw"] = (first / df["bytes_scanned"]).round(1)
+    # On-demand pricing bills at least 10 MB per table a query reads.
+    df["mb_billed"] = df["mb_scanned"].clip(lower=10)
+    first = df.groupby("question")["mb_billed"].transform("first")
+    df["times_cheaper_than_raw"] = (first / df["mb_billed"]).round(1)
     return df
 
 
@@ -132,10 +150,16 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     client = bigquery.Client(project=PROJECT)
 
+    sizes = table_sizes(client)
+    sizes.to_csv(OUT / "table_sizes.csv", index=False)
+    if not sizes.empty:
+        print("Tables built by dbt:")
+        print(sizes[["dataset", "table_id", "row_count", "mb_stored"]].to_string(index=False))
+
     comparison = compare_queries(client)
     comparison.to_csv(OUT / "query_comparison.csv", index=False)
     print("\nSame question, different source (dry runs):")
-    print(comparison[["question", "version", "mb_scanned", "times_less_than_raw"]].to_string(index=False))
+    print(comparison[["question", "version", "mb_scanned", "mb_billed", "times_cheaper_than_raw"]].to_string(index=False))
 
     runs = dbt_runs(client)
     runs.to_csv(OUT / "dbt_runs.csv", index=False)

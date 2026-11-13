@@ -4,10 +4,14 @@
 -- daily source tables it needs: the date window is resolved at compile time so
 -- BigQuery can skip the other daily tables entirely (a subquery in the
 -- _table_suffix filter would scan every day).
+--
+-- Reloaded days replace their partitions through BigQuery copy jobs rather than
+-- a MERGE statement. Copy jobs are free and are not DML, so incremental runs
+-- also work in the BigQuery sandbox.
 {{ config(
     materialized='incremental',
     incremental_strategy='insert_overwrite',
-    partition_by={'field': 'event_date', 'data_type': 'date', 'granularity': 'day'},
+    partition_by={'field': 'event_date', 'data_type': 'date', 'granularity': 'day', 'copy_partitions': true},
     cluster_by=['event_name', 'user_pseudo_id'],
     on_schema_change='append_new_columns'
 ) }}
