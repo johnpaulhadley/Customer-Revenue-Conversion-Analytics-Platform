@@ -15,6 +15,7 @@ BigQuery, dbt, Python (pandas, SciPy, statsmodels), Tableau Public.
 - [Business case, scope and KPI definitions](docs/business_case.md)
 - [Data model](docs/data_model.md)
 - [Source data profile](docs/data_profile.md)
+- [BigQuery cost results](docs/cost_results.md)
 
 ## Run locally
 Needs Python 3.11+, the [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) and a Google Cloud project with BigQuery enabled.

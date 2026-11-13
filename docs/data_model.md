@@ -32,7 +32,7 @@ marts.fct_purchase_reconciliation  data-quality view for the dashboard and READM
 
 ## Cost design
 - **Daily-table pruning.** The source is one table per day. `stg_events` filters on `_table_suffix` with dates fixed when the model compiles, so BigQuery opens only the days being loaded. A filter written as a subquery would make BigQuery open every day.
-- **Partitioning and clustering.** `stg_events` is partitioned by `event_date` and clustered by `event_name` and `user_pseudo_id`, so date-filtered and event-filtered queries read only what they need.
+- **Partitioning and clustering.** `stg_events` is partitioned by `event_date`, so date-filtered queries read only the days they need. It is also clustered by `event_name` and `user_pseudo_id`, though at about 14 MB per day the partitions are too small for clustering to skip much (see [cost results](cost_results.md)).
 - **Incremental loads.** After the first build, `stg_events` reprocesses only the last three days (`lookback_days`), replacing those partitions. A chosen range can be reloaded with `--vars '{backfill_start: ..., backfill_end: ...}'`.
 - **Free partition replacement.** Reloaded days replace their partitions through BigQuery copy jobs rather than a MERGE statement. Copy jobs cost nothing and are not DML, so incremental runs also work in the BigQuery sandbox.
 - **Narrow columns.** Staging keeps about 25 of the source's columns and only the item fields the product analysis uses.
