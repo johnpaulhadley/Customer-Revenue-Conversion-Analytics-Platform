@@ -27,3 +27,4 @@
 - **Opportunity, New visitors: viewed a product to added to cart:** $8,073 over the three months at 25% of the gap ($3,229 to $16,147); counted revenue was $307,640.
 - **Opportunity, New visitors: session to viewed a product:** $4,159 over the three months at 25% of the gap ($1,664 to $8,318); counted revenue was $307,640.
 - **Opportunity, New visitors: added to cart to began checkout:** $3,538 over the three months at 25% of the gap ($1,415 to $7,077); counted revenue was $307,640.
+- **Test plan:** detecting new visitors' payment step rising from 48.44% to 57.19% (25% of the gap) needs 511 sessions reaching shipping per variant, about 4 weeks at this period's traffic.

@@ -29,4 +29,4 @@ The incremental run reloads only the last three days of events and replaces thos
 Clustering `stg_events` by event name barely reduced the bytes read by models that filter to purchase events. Each daily partition holds about 14 MB, which BigQuery stores as one block, so there is nothing for clustering to skip. Clustering pays off on partitions far larger than these.
 
 ## Totals
-Every query, including the failed sandbox runs during setup, used about 20 GB of the free 1 TB monthly allowance.
+Every query in the project, including the failed sandbox runs during setup and later rebuilds, used less than 30 GB of the free 1 TB monthly allowance.
