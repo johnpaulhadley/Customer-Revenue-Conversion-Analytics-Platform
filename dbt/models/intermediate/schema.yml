@@ -14,7 +14,7 @@ models:
         data_tests:
           - accepted_values:
               arguments:
-                values: ['Organic Search', 'Direct', 'Paid Search', 'Referral', 'Email', 'Other', 'Unknown']
+                values: ['Organic Search', 'Direct', 'Paid Search', 'Referral', 'Self-referral', 'Email', 'Affiliate', 'Other', 'Unknown', 'Not recorded']
   - name: int_purchase_reconciliation
     columns:
       - name: event_date

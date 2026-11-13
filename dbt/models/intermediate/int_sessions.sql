@@ -45,11 +45,13 @@ select
     s.ga_session_number = 1                                              as is_new_user,
     {{ channel_group('s.first_user_source', 's.first_user_medium') }}   as first_user_channel,
     {{ channel_group('s.session_source', 's.session_medium') }}         as session_channel,
-    -- Reporting channel: the session's own source where recorded, else the user's first touch.
+    -- Reporting channel: the session's own source and medium. About a quarter of
+    -- sessions carry neither (none of them include a purchase); they are kept
+    -- as 'Not recorded' rather than given the visitor's first-touch channel,
+    -- which would pull down the conversion rate of whichever channel they joined.
     case
-        when s.session_medium is not null
-            then {{ channel_group('s.session_source', 's.session_medium') }}
-        else {{ channel_group('s.first_user_source', 's.first_user_medium') }}
+        when s.session_source is null and s.session_medium is null then 'Not recorded'
+        else {{ channel_group('s.session_source', 's.session_medium') }}
     end                                                                  as channel,
     case when s.country in ('United States', 'India', 'Canada', 'United Kingdom') then s.country
          else 'Rest of world' end                                        as country_group,
