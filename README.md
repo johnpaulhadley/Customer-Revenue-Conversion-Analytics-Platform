@@ -35,7 +35,7 @@ Over the 92 days: 360,129 sessions, 4,451 orders and $307,640 of revenue, a 1.35
 
 ## Dashboard
 
-A Tableau Public dashboard built on the exported marts is in progress.
+A five-page Tableau Public dashboard built on the exported marts is in progress (Overview, Checkout Funnel, Channels, Products, Opportunity). The [build guide](docs/tableau_build_guide.md) lists every calculated field and the checks it must pass.
 
 ## Data and limitations
 
@@ -86,6 +86,7 @@ An incremental run billed 112 MB for the staging table against 2,146 MB for a fu
 - [Data model and definitions](docs/data_model.md)
 - [Source data profile](docs/data_profile.md)
 - [BigQuery cost results](docs/cost_results.md)
+- [Tableau build guide](docs/tableau_build_guide.md)
 - [Analysis notebook](notebooks/conversion_analysis.ipynb), with results in [`data/exports/analysis/`](data/exports/analysis/)
 
 ## Stack
