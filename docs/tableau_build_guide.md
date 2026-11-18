@@ -244,7 +244,7 @@ On Products sheets, add **Item Category** and **MONTH(Month)** filters, applied 
 - Row 1: KPI Tiles.
 - Row 2: Revenue by Week | Conversion by Week.
 - Row 3: Conversion by Visitor Type | Conversion by Device.
-- Text box: "Returning visitors convert at more than four times the rate of new ones. Mobile and desktop convert at the same rate: the gap is who the visitor is, not the device."
+- Text box: "Returning visitors convert at more than four times the rate of new ones. Mobile and desktop convert at the same rate: the gap is who the visitor is, not the device. Bars show 95% confidence intervals. Revenue is understated 1 to 10 November (purchases without transaction IDs are excluded) and from 26 January (purchases recorded without revenue); the last weekly point is a single day."
 
 **Checkout Funnel**
 - Filters: Month, Device, Channel, Country Group.
