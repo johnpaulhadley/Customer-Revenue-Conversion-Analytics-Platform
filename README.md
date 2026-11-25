@@ -4,6 +4,8 @@ Where is the Google Merchandise Store losing revenue across traffic, conversion,
 
 This project answers that from Google's public GA4 e-commerce sample: 4.3 million events from November 2020 to January 2021, modelled in BigQuery with dbt, tested with statistical methods in Python, and presented in Tableau Public. The answer is not a device problem. It is first-time visitors stalling at the payment step of checkout.
 
+**[Explore the interactive dashboard on Tableau Public](https://public.tableau.com/app/profile/john.hadley1222/viz/CustomerRevenueConversionAnalyticsPlatform/Overview)**
+
 ![Funnel, returning vs new visitors](images/analysis_funnel.png)
 
 ## Key findings
@@ -35,7 +37,21 @@ Over the 92 days: 360,129 sessions, 4,451 orders and $307,640 of revenue, a 1.35
 
 ## Dashboard
 
-A five-page Tableau Public dashboard built on the exported marts is in progress (Overview, Checkout Funnel, Channels, Products, Opportunity). The [build guide](docs/tableau_build_guide.md) lists every calculated field and the checks it must pass.
+A five-page [Tableau Public dashboard](https://public.tableau.com/app/profile/john.hadley1222/viz/CustomerRevenueConversionAnalyticsPlatform/Overview) built on the exported marts. Every rate, including the 95% confidence intervals, is calculated in Tableau from additive counts, so it stays correct under any filter. A [PDF of all five pages](dashboards/revenue_conversion_dashboard.pdf) and screenshots are below, and the [build guide](docs/tableau_build_guide.md) lists every calculated field and the checks each page passed before publishing.
+
+| Page | Question it answers |
+|---|---|
+| Overview | How is the store doing, and who converts? |
+| Checkout Funnel | Where do new visitors fall behind returning ones? |
+| Channels | Which traffic sources convert, and how much does tracking distort that? |
+| Products | Which merchandise brings the revenue? |
+| Opportunity | What would closing the gap be worth, and how would we test it? |
+
+![Overview](images/dashboard_overview.png)
+![Checkout funnel](images/dashboard_funnel.png)
+![Channels](images/dashboard_channels.png)
+![Products](images/dashboard_products.png)
+![Opportunity](images/dashboard_opportunity.png)
 
 ## Data and limitations
 

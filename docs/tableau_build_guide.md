@@ -39,6 +39,8 @@ Check the data types in each source (the icon next to each field in the Data pan
 
 Rename two fields in Sessions for readability (right-click > Rename): **User Type** to **Visitor Type**, and **Device Category** to **Device**.
 
+Tableau may give **Country Group** a globe icon, guessing it is a map field. "Rest of world" is not a country, so right-click it > **Geographic Role > None**.
+
 ## 2. Calculated fields
 
 Create these in the **Sessions** data source (**Analysis > Create Calculated Field**). Every rate is a ratio of sums, so it stays correct for any filter. Never average a rate.
@@ -106,7 +108,12 @@ Channel helpers:
 ```
 Self-referral flag
 IF [Channel] = "Self-referral" THEN "Store's own domain" ELSE "Other channels" END
+
+Has recorded source
+[Channel] != "Not recorded"
 ```
+
+`Has recorded source` is how the channel charts leave out sessions with no source. A sheet can hold only one filter per field, and Channel already carries the page-wide filter, so excluding Not recorded through Channel itself would change every page.
 
 In the **Opportunities** data source:
 
@@ -127,113 +134,123 @@ SUM([Extra Revenue 50Pct]) - SUM([Extra Revenue 10Pct])
 
 Create each worksheet with the **New Worksheet** tab at the bottom. Name it as shown, since the dashboards refer to these names.
 
+**Measure Names filters.** Several sheets use Measure Names and Measure Values to show a chosen set of fields. Tableau ticks every field by default, so whenever you drag **Measure Names** to Filters, click **None** first and then tick only the fields listed. Aliases you set on Measure Names apply across the whole workbook.
+
 ### Overview worksheets (Sessions source)
 
 **KPI Tiles**
-- Drag **Measure Values** to Text on the Marks card, and **Measure Names** to Columns.
-- In the Measure Values card, keep only: SUM(Sessions), Conversion Rate, SUM(Orders), Revenue, Average Order Value, Revenue per Session. Remove anything else.
-- Rename the column headers (right-click a header > Edit Alias): Sessions, Conversion, Orders, Revenue, Avg order, Revenue / session.
-- Text: font size 20, bold. Format > Borders: none. Hide the row header if one appears.
+1. Drag **Measure Names** to Filters > **None** > tick Sessions, Conversion Rate, Orders, Revenue, Average Order Value, Revenue per Session.
+2. Drag **Measure Names** to Columns and **Measure Values** onto Text. Order the fields in the Measure Values card as listed above.
+3. Rename the column headers (right-click > Edit Alias): Sessions, Conversion, Orders, Revenue, Avg order, Revenue / session.
+4. Text: size 18 to 20, bold. On the dashboard, hide the sheet title.
+
+Do not double-click the six fields instead: that puts each one on both Rows and Columns and builds a grid of charts.
 
 **Revenue by Week**
-- Columns: **Session Date**. Click the pill's dropdown arrow and choose **Week Number** from the lower group of options (the green, continuous one), so the axis runs week by week.
-- Rows: **Revenue**. Mark type: Line.
-- Title: "Weekly revenue".
+- Columns: **Session Date**. Click the pill's dropdown and choose **Week Number** from the lower group of options (green, continuous).
+- Rows: **Revenue**. Mark type: Line. Title: "Weekly revenue".
 
 **Conversion by Week**
-- Same as above, with **Conversion Rate** on Rows. Title: "Weekly conversion rate". Keep it as a separate sheet: never put revenue and conversion on two axes of one chart.
+- Duplicate Revenue by Week and drop **Conversion Rate** onto the Revenue pill. Title: "Weekly conversion rate". Keep it a separate sheet: never put revenue and conversion on two axes of one chart.
 
 **Conversion by Visitor Type** (confidence interval chart)
-1. Rows: **Visitor Type**. Columns: **CI Low**.
-2. Marks card: change the mark type to **Gantt Bar**. Drag **CI Width** to Size. This draws the 95% interval as a bar from CI Low to CI High.
-3. Drag **Conversion Rate** to Columns, to the right of CI Low. Right-click the new pill > **Dual Axis**, then right-click the top axis > **Synchronize Axis**, then hide the top axis (right-click > untick Show Header). Both axes now share one scale.
-4. On the Conversion Rate marks card choose **Circle**, size medium, colour by **Visitor Type**. Add **Conversion Rate** to Label.
-5. Tooltip: "<Visitor Type>: <Conversion Rate> (95% CI <CI Low> to <CI High>), <SUM(Sessions)> sessions".
-6. Title: "Conversion rate with 95% confidence interval".
+1. Rows: **Visitor Type**. Columns: **CI Low**. Mark type: **Gantt Bar**. Size: **CI Width**. Colour: light grey. This draws the 95% interval as a bar from CI Low to CI High.
+2. Drag **Conversion Rate** to Columns, right of CI Low. Right-click it > **Dual Axis**. Right-click the top axis > **Synchronize Axis**, then untick **Show Header**.
+3. On the AGG(Conversion Rate) marks tab: mark type **Circle**, Colour **Visitor Type** (New #EB6834, Returning #2A78D6), Label **Conversion Rate**. Nothing on Size: CI Width belongs only on the Gantt tab. Remove Measure Names from Colour on any tab if Tableau adds it.
+4. Bottom axis title: "Conversion rate". Tooltip: "<Visitor Type>: <AGG(Conversion Rate)> (95% CI <AGG(CI Low)> to <AGG(CI High)>), <SUM(Sessions)> sessions".
+5. Title: "Conversion rate with 95% confidence interval".
 
 **Conversion by Device**
-- Duplicate Conversion by Visitor Type (right-click the tab > Duplicate) and replace Visitor Type with **Device** on Rows and on Colour (set the circle colour to the single blue).
+- Duplicate Conversion by Visitor Type, drop **Device** onto the Visitor Type pill on Rows, remove Visitor Type from Colour and set the circles to #2A78D6.
 
 ### Checkout Funnel worksheets (Sessions source)
 
 **Funnel Step Rates**
-1. Drag **Measure Values** to Columns and **Measure Names** to Rows.
-2. In the Measure Values card, remove everything and add the six step-rate fields (1 Viewed a product to 6 Purchased). Their number prefixes keep them in order; if they are not, sort Measure Names alphabetically.
-3. Drag **Visitor Type** to Rows, to the right of Measure Names, and to Colour. Each step now has a returning bar and a new bar.
-4. Label: Measure Values, 0 decimals. Axis fixed from 0 to 1 (right-click axis > Edit Axis > Fixed).
+1. Measure Names to Filters > **None** > tick the six step fields (1 Viewed a product to 6 Purchased).
+2. Measure Names to Rows, Measure Values to Columns. **Visitor Type** to Rows (right of Measure Names) and to Colour. Measure Values to Label.
+3. Axis: Edit Axis > Fixed 0 to 1; Format > Scale > Numbers > Percentage, 0 decimals. Title the axis "Share continuing to the next step".
+4. If labels show 0 and 1, the step fields still have a whole-number default format: set each to Percentage, 0 decimals (section 2).
 5. Title: "Share continuing to the next step (closed funnel)".
 
-**Funnel Volume**
-- Columns: Measure Values. Rows: Measure Names.
-- Measure Values: SUM(Sessions), SUM(Funnel View Item), SUM(Funnel Add To Cart), SUM(Funnel Begin Checkout), SUM(Funnel Add Shipping), SUM(Funnel Add Payment), SUM(Funnel Purchase). Drag them into that order in the Measure Values card.
-- Edit the row aliases to: Sessions, Viewed a product, Added to cart, Began checkout, Added shipping, Added payment, Purchased.
-- Colour: Visitor Type (stacked bars). Label: Measure Values.
-- Title: "Sessions reaching each step".
+**Funnel Volume** (a number table: on a bar chart, 360,129 sessions would dwarf 2,848 purchases)
+1. Measure Names to Filters > **None** > tick Sessions, Funnel View Item, Funnel Add To Cart, Funnel Begin Checkout, Funnel Add Shipping, Funnel Add Payment, Funnel Purchase.
+2. Measure Names to Rows, **Visitor Type** to Columns, Measure Values onto Text. Order the fields in the Measure Values card as listed.
+3. Row aliases: Sessions, Viewed a product, Added to cart, Began checkout, Added shipping, Added payment, Purchased.
+4. **Analysis > Totals > Show Row Grand Totals**. Title: "Sessions reaching each step".
 
-**Cart Abandonment by Visitor Type**
-- Rows: Visitor Type. Columns: Cart Abandonment. Colour: Visitor Type. Label on.
+**Cart Abandonment**
+- Rows: Visitor Type. Columns: Cart Abandonment. Colour: Visitor Type. Label on. Axis fixed 0 to 1.
 - Title: "Carts not bought in the same session".
 
 ### Channels worksheets
 
 **Channel Conversion** (Sessions source)
-- Duplicate Conversion by Device and replace Device with **Channel** on Rows. Circle colour: single blue.
-- Drag **Channel** to Filters and **exclude Not recorded** (sessions with no source cannot be assigned a channel).
-- Sort Channel by Conversion Rate, descending.
+- Duplicate Conversion by Device and drop **Channel** onto the Device pill.
+- Drag **Has recorded source** to Filters and keep **True** only.
+- Sort Channel descending by Conversion Rate.
 - Title: "Conversion per session by channel, with 95% CI".
 
 **Channel Revenue** (Sessions source)
-- Rows: Channel (exclude Not recorded, as above). Columns: Revenue. Sort descending.
-- Colour: **Self-referral flag**. Store's own domain in orange (#EB6834), Other channels in blue.
-- Label: Revenue.
+- Rows: Channel. Columns: Revenue. Filter: **Has recorded source** = True. Sort descending.
+- Colour: **Self-referral flag**. Store's own domain #EB6834, Other channels #2A78D6. Label: Revenue.
 - Title: "Revenue by channel".
 
 **Per Session vs First Touch** (Attribution source)
-- Rows: **Channel**. Columns: Measure Values.
-- Measure Values: AVG(Session Conversion) and AVG(Visitor To Buyer). (One row per channel, so AVG returns the value itself.)
-- Drag **Measure Names** to Colour and to Rows (right of Channel) for side-by-side bars. Alias them: "Per session" and "Visitors first brought who bought".
-- Format both as Percentage, 2 decimals. Label on.
-- Title: "Judged per session vs by the customers a channel brings".
+1. Set Session Conversion and Visitor To Buyer to Percentage, 2 decimals (Default Properties).
+2. Measure Names to Filters > **None** > tick Session Conversion and Visitor To Buyer.
+3. Rows: **Channel**, then **Measure Names**. Colour: Measure Names. Columns and Label: Measure Values.
+4. Aliases: "Per session" and "First-touch visitors who bought"; drag Per session above the other. Colours: Per session #2A78D6, First-touch #1BAF7A.
+5. Axis: Format > Numbers > Percentage, 1 decimal; title "Conversion rate".
+6. Title: "Judged per session vs by the visitors a channel first brought".
 
 ### Products worksheets (Products source)
 
+First set **Item Revenue Usd** (in this source) to Currency (Custom), 0 decimals.
+
 **Revenue by Group**
-- Rows: **Item Category**. Columns: SUM(Item Revenue Usd). Sort descending. Label on, currency, 0 decimals.
+- Rows: **Item Category**. Columns and Label: Item Revenue Usd. Sort descending. Axis title: "Revenue".
 - Title: "Item revenue by merchandise group".
 
 **Top Products**
-- Rows: **Item Name**. Columns: SUM(Item Revenue Usd). Colour: Item Category.
-- Drag Item Name to Filters > **Top** tab > By field: Top 15 by Sum of Item Revenue Usd. Sort descending.
+- Rows: **Item Name**, then **Item Category**. Columns and Label: Item Revenue Usd.
+- Item Name to Filters > **Top** tab > Top 15 by Sum of Item Revenue Usd. Sort descending. Widen the name column so names show in full.
 - Title: "Top 15 products by revenue".
 
 **Group by Month**
-- Columns: **MONTH(Month)** (discrete). Rows: Item Category. Mark type: Square. Colour and Label: SUM(Item Revenue Usd).
-- Colour: a single-hue sequential palette (Blue), light to dark.
+- Columns: **Month**, set to **Month** from the lower (continuous) group of the pill menu, then **Discrete**, so columns read November 2020, December 2020, January 2021. Plain MONTH() puts January before November, and YEAR() merges the months.
+- Rows: Item Category, sorted descending by revenue. Mark type: **Square**. Colour and Label: Item Revenue Usd, Blue sequential palette.
+- Hide the "Month of Month" header (right-click > Hide Field Labels for Columns).
 - Title: "Item revenue by group and month".
 
 ### Opportunity worksheets
 
 **Opportunity Range** (Opportunities source)
-1. Rows: **Opportunity**. Columns: SUM(Extra Revenue 10Pct). Mark type: Gantt Bar. Size: **Range Width**. This draws each range from the 10% to the 50% scenario.
-2. Add SUM(Extra Revenue 25Pct) to Columns, make it **Dual Axis**, **Synchronize Axis**, hide the top axis, mark type Circle. Label it with SUM(Extra Revenue 25Pct), currency, 0 decimals.
-3. Sort Opportunity by SUM(Extra Revenue 25Pct), descending.
-4. Title: "Extra revenue over three months: dot = 25% of the gap closed, bar = 10% to 50%".
+1. Set Extra Revenue 10Pct, 25Pct and 50Pct to Currency (Custom), 0 decimals. Create `Range Width` (section 2).
+2. Rows: **Opportunity**. Columns: **Extra Revenue 10Pct**. The file also has Extra Conversions columns with near-identical names; using one of those makes every bar start near $0.
+3. Mark type: **Gantt Bar**, Size: **Range Width**, colour light grey. This draws each range from the 10% to the 50% scenario.
+4. Add **Extra Revenue 25Pct** to Columns, **Dual Axis**, **Synchronize Axis**, hide the top axis. On its tab: Circle, #2A78D6, Label Extra Revenue 25Pct, nothing on Size.
+5. Sort Opportunity descending by Sum of Extra Revenue 25Pct. Axis: title "Extra revenue over the three months", currency format.
+6. Title: "What closing part of each gap would be worth: dot = 25% of the gap, bar = 10% to 50%".
 
 **Test Plan** (Test Plan source)
-- Rows: Gap Closed (discrete), Baseline Rate, Target Rate (all as dimensions: right-click > Dimension, discrete). Text: SUM(Sessions Per Variant) and SUM(Weeks At Current Traffic).
-- Formats: Gap Closed, Baseline Rate and Target Rate as Percentage 0 decimals; weeks 0 decimals.
-- Title: "A/B test size for the payment step (80% power, 5% significance)".
+1. Convert **Gap Closed** and **Target Rate** to Dimension and Discrete. Formats: Gap Closed Percentage 0 decimals, Target Rate Percentage 1 decimal, Weeks At Current Traffic Number 1 decimal.
+2. Rows: Gap Closed, Target Rate. Measure Names to Filters > **None** > Sessions Per Variant and Weeks At Current Traffic. Measure Names to Columns, Measure Values onto Text.
+3. Aliases: "Sessions per variant" and "Weeks at this period's traffic".
+4. Title: "A/B test size for the payment step (80% power, 5% significance, from a 48.4% baseline)".
 
 ## 4. Filters
 
-On each Sessions worksheet, right-click a filter and choose **Apply to Worksheets > All Using This Data Source**, so one filter controls a whole page.
+Create filters on a worksheet, then show them on the dashboard (click a sheet on the dashboard > its down arrow > **Filters**).
 
-- **Month:** drag Session Date to Filters > Months, select all, then Show Filter. Display as a single-value dropdown with "All".
-- **Device**, **Visitor Type**, **Country Group**, **Channel**: drag each to Filters, select all, Show Filter, dropdown with "All".
+**Sessions source** (create on Revenue by Week): drag each field to Filters, click **All** > OK, then right-click > **Apply to Worksheets > All Using This Data Source** > **Show Filter**, and set the card to **Single Value (dropdown)**.
+- **Session Date**, choosing **Month / Year** in the first dialog.
+- **Device**, **Visitor Type**, **Country Group**, **Channel**.
 
-The Channel Conversion and Channel Revenue sheets keep their own filter excluding Not recorded. A page filter set to All cannot bring it back, because Tableau applies both.
+Then limit **Visitor Type**: right-click it > **Apply to Worksheets > Selected Worksheets** and untick Funnel Step Rates, Funnel Volume and Cart Abandonment. Filters applied to all sheets share one setting across pages, so without this, picking New on the Overview would remove the Returning bars from the funnel page.
 
-On Products sheets, add **Item Category** and **MONTH(Month)** filters, applied to all sheets using the Products source.
+**Products source** (create on Revenue by Group): **Item Category**, and **Month** as **Month / Year**, each applied to all sheets using the Products source.
+
+The Attribution, Opportunities and Test Plan sheets cover the whole period and take no filters.
 
 ## 5. Dashboards
 
@@ -247,28 +264,28 @@ On Products sheets, add **Item Category** and **MONTH(Month)** filters, applied 
 - Text box: "Returning visitors convert at more than four times the rate of new ones. Mobile and desktop convert at the same rate: the gap is who the visitor is, not the device. Bars show 95% confidence intervals. Revenue is understated 1 to 10 November (purchases without transaction IDs are excluded) and from 26 January (purchases recorded without revenue); the last weekly point is a single day."
 
 **Checkout Funnel**
-- Filters: Month, Device, Channel, Country Group.
-- Row 1: Funnel Step Rates (wide).
-- Row 2: Funnel Volume | Cart Abandonment by Visitor Type.
-- Text box: "Of new visitors who enter shipping details, 48% go on to enter payment details, against 83% of returning visitors. Once payment is entered, both complete at similar rates. A session counts at a step only if it completed every earlier step in that session."
+- Filters: Month, Device, Channel, Country Group. No Visitor Type filter: this page compares the two.
+- Row 1: Funnel Step Rates (wide). Set it to **Fit > Entire View** so all twelve bars show without scrolling.
+- Row 2: Funnel Volume | Cart Abandonment.
+- Text box: "Of new visitors who enter shipping details, 48% go on to enter payment details, against 83% of returning visitors. Once payment is entered, both complete at similar rates. A session counts at a step only if it completed every earlier step in that session; in this data the shipping step fires with the start of checkout, so it shows 100%."
 
 **Channels**
 - Filters: Month, Device, Visitor Type.
 - Row 1: Channel Conversion | Channel Revenue.
 - Row 2: Per Session vs First Touch.
-- Text box: "Self-referral: visits that restarted on the store's own domain, often on return from checkout. They carry a third of revenue but no outside site sent the visitor. A quarter of sessions have no recorded source and are left out. Per session, paid search converts at 0.61%; its first-time visitors go on to buy as often as organic search's (1.27% vs 1.31%)."
+- Text box: "Self-referral: visits that restarted on the store's own domain, often on return from checkout. They carry a third of revenue, but no outside site sent the visitor; fixing this in GA4 means listing the store's domains as unwanted referrals. A quarter of sessions have no recorded source and are left out. Per session, paid search converts at 0.61%; the visitors it first brought go on to buy at about the same rate as organic search's (1.27% vs 1.31%)."
 - Note under Per Session vs First Touch: "Whole period; not affected by filters."
 
 **Products**
 - Filters: Item Category, Month.
 - Row 1: Revenue by Group | Top Products.
 - Row 2: Group by Month.
-- Text box: "Purchases only. In this data, product-view and add-to-cart events carry long product lists (about 36 and 44 per session), so per-product view and add rates are not reliable."
+- Text box: "Purchases only. Apparel brings 58% of item revenue, and 13 of the top 15 products are apparel, led by hoodies and sweatshirts in the winter season. In this data, product-view and add-to-cart events carry long product lists (about 36 and 44 per session), so per-product view and add-to-cart rates are not reliable and are not shown."
 
 **Opportunity**
 - Row 1: Opportunity Range (wide).
 - Row 2: Test Plan | text box with assumptions:
-  "Each estimate closes part of a significant gap between new and returning visitors, valued at new visitors' revenue per conversion. Estimates overlap, so they are alternatives, not a total. Counted revenue in the period was $307,640. Returning visitors arrive with more intent, so closing the whole gap is not assumed."
+  "Each estimate closes part of a significant gap between new and returning visitors, valued at new visitors' revenue per conversion. The estimates overlap (a better payment step is part of better cart completion), so they are alternatives, not a total. Counted revenue in the period was $307,640. Returning visitors arrive with more intent, so closing the whole gap is not assumed. The data has no costs, so these are revenue, not profit. The test plan shows how many new visitors reaching shipping each version of the checkout needs before a change to the payment step can be judged."
 
 Hide the worksheets so only the five dashboards show: right-click any dashboard tab > **Hide All Sheets**.
 
@@ -295,7 +312,7 @@ With all filters set to All:
 | Opportunity: new visitors' carts, 25% | $18,929 |
 
 Also check that:
-- Selecting Visitor Type = New on the Overview changes every chart on the page.
+- Selecting Visitor Type = New on the Overview changes every chart on the page, and the Checkout Funnel page still shows both visitor types.
 - Not recorded never appears in the channel charts.
 - No chart shows a rate as a SUM of rates (all rates come from the calculated fields).
 
@@ -305,4 +322,4 @@ Also check that:
 2. The published viz opens in the browser. Under its settings (the gear or "Edit Details"), add a description and set **Show views as tabs** on, so all five pages are reachable.
 3. While you are still working on it, you can turn off **Show Viz on Profile**; turn it back on when finished.
 4. Copy the viz's URL and send it to me for the README.
-5. Screenshots: on each page, use **Download > Image** in Tableau Public (or Cmd+Shift+4 on the Mac) and save them as `images/dashboard_overview.png`, `images/dashboard_funnel.png`, `images/dashboard_channels.png`, `images/dashboard_products.png` and `images/dashboard_opportunity.png`. **Download > PDF** with "This workbook" selected saves all pages as `dashboards/revenue_conversion_dashboard.pdf`.
+5. Screenshots: on each page, use **Download > Image** in Tableau Public (or Cmd+Shift+4 on the Mac) and save them as `images/dashboard_overview.png`, `images/dashboard_funnel.png`, `images/dashboard_channels.png`, `images/dashboard_products.png` and `images/dashboard_opportunity.png`. **Download > PDF** with "This workbook" selected saves all pages; move it into the project as `dashboards/revenue_conversion_dashboard.pdf`. Do not type the folder into the file name box of a Mac save dialog: macOS stores the slash as a colon, and Git will not find the file.
